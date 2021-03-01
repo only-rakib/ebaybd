@@ -3,6 +3,7 @@
 
 {% block styles %}
 <title>পূর্ব বড়ুয়া তরুন সংঘ &#8211; একটি সামাজিক সেচ্ছাসেবী সংগঠন</title>
+
 {% endblock styles %}
 
 {% block container %}
@@ -21,38 +22,26 @@
 <div id="themeSlider" class="carousel slide" data-bs-ride="carousel">
 
     <ol class="carousel-indicators">
-        <li data-bs-target="#themeSlider" data-bs-slide-to="0" class="active"></li>
-        <li data-bs-target="#themeSlider" data-bs-slide-to="1"></li>
-        <li data-bs-target="#themeSlider" data-bs-slide-to="2"></li>
+        {% for p in photos %}
+        <li data-bs-target="#themeSlider" data-bs-slide-to="{{forloop.counter0}}"
+            class="{% if forloop.counter0 == 0 %} active {% endif %}"></li>
+        {% endfor %}
+
     </ol>
 
     <div class="carousel-inner">
-        <div class="carousel-item active">
+        {% for p in photos %}
+        <div class="carousel-item {% if forloop.counter0 == 0 %} active {% endif %}">
             <div class="imgOverlay"></div>
-            <img src="{% static 'images/20191218_104909-scaled.jpg' %}" alt="First slide">
+            <img src="{{p.image.url}}" style="max-height: 90vh;" alt="First slide">
             <div class="carousel-caption">
-                <h3>১৫০ টি পরিবারের মাঝে শীত বস্ত্র বিতরন-২০১৯
+                <h3>{{p.title}}
                 </h3>
-                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                <p>{{p.subtitle}}</p>
             </div>
         </div>
-        <div class="carousel-item">
-            <div class="imgOverlay"></div>
-            <img src="{% static 'images/20201118_122803-scaled.jpg' %}" alt="Second slide">
-            <div class="carousel-caption">
-                <h3>পূর্ব বড়ুয়া তরুণ সংঘের উদ্যোগে মাস্ক বিতরণ ক্যাম্পেইন এ উপস্থিত ছিলেন
-                </h3>
-                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <div class="imgOverlay"></div>
-            <img src="{% static 'images/Bikkho-scaled.jpg' %}" alt="Third slide">
-            <div class="carousel-caption">
-                <h3>পেঁপের চারা বিতরণ </h3>
-                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-            </div>
-        </div>
+        {% endfor %}
+
     </div>
 
     <a class="carousel-control-prev" href="#themeSlider" role="button" data-bs-slide="prev">
@@ -74,27 +63,32 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 col-sm-4 mt-3 text-center">
-            <a href="#"><img class="img-fluid" src="{% static 'images/go-1.png' %}" alt=""></a>
+            <a href="{% url 'our_causes' %}"><img style="max-width:370px;max-height:140px" class="img-fluid"
+                    src="{% static 'images/go-1.png' %}" alt="our_causes"></a>
         </div>
         <div class="col-12 col-sm-4 mt-3 text-center">
-            <a href="#"><img class="img-fluid" src="{% static 'images/go-2.png' %}" alt=""></a>
+            <a href="{% url 'volunteerRegistration' %}"><img style="max-width:370px;max-height:140px" class="img-fluid"
+                    src="{% static 'images/go-2.png' %}" alt="Join With Us"></a>
         </div>
         <div class="col-12 col-sm-4 mt-3 text-center">
-            <a href="#"><img class="img-fluid" src="{% static 'images/go-3.png' %}" alt=""></a>
+            <a href="#"><img style="max-width:370px;max-height:140px" class="img-fluid"
+                    src="{% static 'images/go-3.png' %}" alt="get_involved"></a>
         </div>
     </div>
 </div>
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 col-sm-4 mt-3 text-center">
-            <a href="#"><img class="img-fluid" src="{% static 'images/Untitled-2.jpg-22.jpg' %}" alt=""></a>
+            <a href="#"><img style="max-width:370px;max-height:140px" class="img-fluid"
+                    src="{% static 'images/Untitled-2.jpg-22.jpg' %}" alt="winter Clothing"></a>
         </div>
         <div class="col-12 col-sm-4 mt-3 text-center">
-            <a href="#"><img class="img-fluid" src="{% static 'images/coronavirus-cells-banner_1035-18753.jpg' %}"
-                    alt=""></a>
+            <a href="{% url 'Covid19' %}"><img style="max-width:370px;max-height:140px" class="img-fluid"
+                    src="{% static 'images/coronavirus-cells-banner_1035-18753.jpg' %}" alt="covid19"></a>
         </div>
         <div class="col-12 col-sm-4 mt-3 text-center">
-            <a href="#"><img class="img-fluid" src="{% static 'images/Donate-Blood.jpg' %}" alt=""></a>
+            <a href="{% url 'donate_blood' %}"><img style="max-width:370px;max-height:140px" class="img-fluid"
+                    src="{% static 'images/Donate-Blood.jpg' %}" alt="blood donation"></a>
         </div>
     </div>
     <div class="row mt-5">
@@ -118,51 +112,31 @@
             <div class="sidebar widget p-4">
                 <h3>সর্বশেষ কার্যক্রম</h3>
                 <ul>
-                    <li>
+
+                    {% for i in news %}
+
+                    {% if forloop.counter < 4 %} <li>
                         <div class="sidebar-thumb">
-                            <img class="animated rollIn"
-                                src="http://shop.spotlayer.com/demo/soft-mag/demo1/wp-content/uploads/16555399183_33b1b1bc26_o-90x75.jpg"
-                                alt="" />
+                            {% if i.image1 %}
+                            <img src="{{i.image1.url}}" style="max-height: 300px;" class="img-fluid">
+                            {% else %}
+                            <img src="{% static 'images/Final.png' %}" style="max-height: 300px;" class="img-fluid">
+
+                            {% endif %}
                         </div><!-- .Sidebar-thumb -->
                         <div class="sidebar-content">
-                            <h5 class="animated bounceInRight"><a href="#">The Complete Guide to Medium
-                                    for Marketers</a></h5>
+                            <h5 class="animated bounceInRight"><a href="{{i.get_absolute_url}}">
+                                    <h6>{{i.title}}</h6>
+                                </a></h5>
                         </div><!-- .Sidebar-thumb -->
                         <div class="sidebar-meta">
-                            <span class="time"><i class="fa fa-clock-o"></i> Aug 27, 2015</span>
+                            <span class="time"><i class="fa fa-clock-o"></i>{{i.created_date}}</span>
 
                         </div><!-- .Sidebar-meta ends here -->
-                    </li><!-- .Li ends here -->
-                    <li>
-                        <div class="sidebar-thumb">
-                            <img class="animated rollIn"
-                                src="http://shop.spotlayer.com/demo/soft-mag/demo1/wp-content/uploads/8S64npOgTu2eWTZIXEfy_DSC_0955-90x75.jpg"
-                                alt="" />
-                        </div><!-- .Sidebar-thumb -->
-                        <div class="sidebar-content">
-                            <h5 class="animated bounceInRight"><a href="#">Watch Now: How to Manipulate
-                                    the Media</a></h5>
-                        </div><!-- .Sidebar-thumb -->
-                        <div class="sidebar-meta">
-                            <span class="time"><i class="fa fa-clock-o"></i> Aug 27, 2015</span>
+                        </li><!-- .Li ends here -->
+                        {% endif %}
+                        {% endfor %}
 
-                        </div><!-- .Sidebar-meta ends here -->
-                    </li><!-- .Li ends here -->
-                    <li>
-                        <div class="sidebar-thumb">
-                            <img class="animated rollIn"
-                                src="http://shop.spotlayer.com/demo/soft-mag/demo1/wp-content/uploads/17153174816_a808becb66_o-90x75.jpg"
-                                alt="" />
-                        </div><!-- .Sidebar-thumb -->
-                        <div class="sidebar-content">
-                            <h5 class="animated bounceInRight"><a href="#">OnePlus Inks First Carrier
-                                    Partnership with Malaysia</a></h5>
-                        </div><!-- .Sidebar-thumb -->
-                        <div class="sidebar-meta">
-                            <span class="time"><i class="fa fa-clock-o"></i> Aug 27, 2015</span>
-
-                        </div><!-- .Sidebar-meta ends here -->
-                    </li><!-- .Li ends here -->
 
                 </ul><!-- .Ul ends here -->
             </div><!-- .Widget ends here -->
@@ -192,35 +166,34 @@
         </div>
     </div>
 </div>
+
+{% for i in quotes %}
 <div class="container-fluid mt-5 bg-light">
     <div class="row">
         <div class="col-1 d-none d-md-block"></div>
         <div class="col">
-            <h3>প্রধান উপদেষ্ঠার বানী</h3>
+            <h3>{{i.designation}} বানী</h3>
             <div class="wrapper">
 
                 <img src="{% static 'images/Final-300x300.png' %}" alt="" class="logo">
 
-                <p>আমরা ভালবাসা, আশা এবং সামাজিক ন্যায়বিচার সমবেত একটি পৃথিবীর স্বপ্ন দেখি, যেখানে মানুষ মর্যাদা ও
-                    নিরাপত্তা নিয়ে বাস করবে। সমাজের অনগ্রসর শ্রেণীকে বিশেষভাবে চরম দরিদ্র, গৃহহীন ও অনাথ শিশুদেরকে
-                    শিক্ষা, পুষ্টি ও আশ্রয় সরবরাহের মাধ্যমে তাদের জাতির জন্য সম্পদে পরিণত করা আমাদের প্রধান লক্ষ্য।
+                <p>
+                    {{i.description|safe}}
                 </p>
             </div>
         </div>
         <div class="col">
-            <h3>প্রধান উপদেষ্ঠা</h3>
+            <h3>{{i.designation}}</h3>
             <div class="card mb-3">
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <img src="{% static 'images/FB_IMG_1598079402580-243x300.jpg' %}" class="img-fluid" alt="...">
+                        <img src="{{i.image.url}}" class="img-fluid" alt="{{i.designation}}">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h5 class="card-title">জনাব আরমান রহমান</h5>
-                            <p class="card-text">বিভাগীয় প্রধান, ইতিহাস বিভাগ, লালমনিরহাট সরকারি কলেজ।</p>
-                            <p class="card-text"><small class="text-muted">সম্পাদক লালমনিরহাট জেলা রোভার।<br>
+                            <h5 class="card-title">{{i.name}}</h5>
+                            <p class="card-text">{{i.occupation}},<br> {{i.organization}}</p>
 
-                                    ২৯তম বিসিএস ক্যাডার কর্মকর্তা।</small></p>
                         </div>
                     </div>
                 </div>
@@ -228,63 +201,26 @@
         </div>
     </div>
 </div>
-<div class="container-fluid mt-5 bg-light">
-    <div class="row">
-        <div class="col-1 d-none d-md-block"></div>
-        <div class="col">
-            <h3>সভাপতির বানী</h3>
-            <div class="wrapper">
+{% endfor %}
 
-                <img src="{% static 'images/Final-300x300.png' %}" alt="" class="logo">
 
-                <p>সামাজিক জীব হিসেবে সমাজের জন্য,আমাদের আশেপাশের মানুষদের জন্য সামান্য কিছু করার মাঝে তৃপ্তি খুজে
-                    পাওয়ার চেতনা নিয়ে এই সংগঠনের কার্যক্রম পরিচালিত হচ্ছে,আমাদের সংগঠনের সদস্যরা বিশ্বাস করে ভোগে
-                    সুখ নেই ত্যাগেই প্রকৃত সুখ এবং দান করার জন্য ধনী হবার প্রয়োজন নেই সুন্দর ইচ্ছাশক্তিই যথেষ্ট।সবার
-                    ঐক্যবদ্ধ প্রচেষ্টায় সংগঠনটি সেবা ও মানবকল্যানমুখী কর্মকান্ডে সবসময় সক্রিয় থাকবে মর্মে আমি আশা
-                    করি
-                </p>
-            </div>
-        </div>
-        <div class="col">
-            <h3>সভাপতি</h3>
-            <div class="card mb-3">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="{% static 'images/00-300x298.jpg' %}" class="img-fluid" alt="...">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">মো: সায়হান সৈকত</h5>
-                            <p class="card-text">সভাপতি</p>
-                            <p class="card-text"><small class="text-muted">পূর্ব বড়ুয়া তরুন সংঘ<br>
-
-                                    উদ্যোক্তা, কুলাঘাট ইউনিয়ন ডিজিটাল সেন্টার।</small></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="container-fluid mt-5" style="background-color: #ccc;">
     <h3 class="p-5">ভিডিও গ্যালারী</h3>
-    <div id="carouselVideoControls" class="carousel slide" data-bs-ride="carousel" data-interval="false">
+    <div id="carouselVideoControls" class="carousel slide" data-interval="false">
         <div class="carousel-inner">
 
-            <div class="carousel-item active">
+            {% for i in videos %}
+            <div class="carousel-item {% if forloop.counter0 == 0 %} active {% endif %}">
                 <div class="carousel-video-inner">
-                    <iframe width="681" height="383" src="https://www.youtube.com/embed/sgouNC8rUhY" frameborder="0"
+                    <iframe width="681" height="383" src="{{i.external_video_storage}}" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen></iframe>
                 </div>
             </div>
-            <div class="carousel-item">
-                <div class="carousel-video-inner">
-                    <iframe width="681" height="383" src="https://www.youtube.com/embed/sgouNC8rUhY" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
-                </div>
-            </div>
+            {% endfor %}
+
+
+
         </div>
         <a class="carousel-control-prev" href="#carouselVideoControls" role="button" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -296,75 +232,41 @@
         </a>
     </div>
 </div>
-<div class="container-fluid">
-    <div class="row blog" style="margin-top:5rem">
-        <div class="col-md-12">
-            <div id="blogCarousel" class="carousel slide" data-bs-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-bs-target="#blogCarousel" data-bs-slide-to="0" class="active"></li>
-                    <li data-bs-target="#blogCarousel" data-bs-slide-to="1"></li>
-                </ol>
-                <!-- Carousel items -->
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <a href="#">
-                                    <img src="{% static 'images/123194794_405258353976011_1780211379764436847_n.jpg' %}" alt="Image" style="max-width:100%;">
-                                </a>
+<!--All the project list start-->
+<div class="container-fluid text-center my-3">
+
+    <div class="row mx-auto my-auto">
+        <div id="recipeCarousel" class="carousel slide w-100" data-interval="false">
+            <div class="carousel-inner w-100" role="listbox">
+
+                {% for i in projects %}
+                <div class="carousel-item {% if forloop.counter0 == 0 %} active {% endif %}">
+                    <div class="col-md-4">
+                        <a href="{{i.get_absolute_url}}">
+                            <div class="card card-body">
+                                <img class="img-fluid" src="{{i.bannerImage.url}}">
                             </div>
-                            <div class="col-md-3">
-                                <a href="#">
-                                    <img src="{% static 'images/123270999_347084419724907_2057958549407391501_n.jpg' %}" alt="Image" style="max-width:100%;">
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="#">
-                                    <img src="{% static 'images/123463502_3561787297215396_6934336209828262397_n.jpg' %}" alt="Image" style="max-width:100%;">
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="#">
-                                    <img src="{% static 'images/123188282_1038829403260249_2551925143377316523_n.jpg' %}" alt="Image" style="max-width:100%;">
-                                </a>
-                            </div>
-                        </div>
-                        <!--.row-->
+                        </a>
                     </div>
-                    <!--.item-->
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <a href="#">
-                                    <img src="{% static 'images/123178086_655225608526960_8846219585287794881_n.jpg' %}" alt="Image" style="max-width:100%;">
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="#">
-                                    <img src="{% static 'images/123194794_405258353976011_1780211379764436847_n.jpg' %}" alt="Image" style="max-width:100%;">
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="#">
-                                    <img src="{% static 'images/123270999_347084419724907_2057958549407391501_n.jpg' %}" alt="Image" style="max-width:100%;">
-                                </a>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="#">
-                                    <img src="{% static 'images/123188282_1038829403260249_2551925143377316523_n.jpg' %}" alt="Image" style="max-width:100%;">
-                                </a>
-                            </div>
-                        </div>
-                        <!--.row-->
-                    </div>
-                    <!--.item-->
                 </div>
-                <!--.carousel-inner-->
+                {% endfor %}
+
             </div>
-            <!--.Carousel-->
+            <a class="carousel-control-prev w-auto" href="#recipeCarousel" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark border border-dark rounded-circle"
+                    aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next w-auto" href="#recipeCarousel" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark border border-dark rounded-circle"
+                    aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
     </div>
+
 </div>
+<!--All the project list end-->
 <div class="cointainer-fluid mt-5 bg-light">
     <div class="row">
         <div class="col-12 col-sm-6 p-5" style="height: 100%;">
@@ -375,27 +277,17 @@
         <div class="col-12 col-sm-6" style="height: 100%;">
             <div class="subscriptionbox">
                 <h2>সাবস্ক্রাইব করুন</h2>
-                সাবস্ক্রাইব করুন খবর, আপডেট ও প্রচারমূলক অনুষ্ঠানের জন্য
-                <form id="feedform" method="post" target="popupwindow">
-                    <div class="mb-3">
-
-                        <input type="text" class="form-control" id="name" placeholder="আপনার নাম..">
-                    </div>
-                    <div class="mb-3">
-
-                        <input type="email" class="form-control" id="mail" placeholder="আপনার ইমেইল..">
-                    </div>
-                    <div class="mb-3">
-
-                        <input type="text" class="form-control" id="Phone" placeholder="আপনার মোবাইল..">
-                    </div>
-                    <div class="mb-3">
-
-                        <input type="text" class="form-control" id="subject" placeholder="বিষয় ..">
-                    </div>
-                    <div class="mb-3">
-                        <textarea class="form-control" id="Textarea1" rows="3" placeholder="এখানে লিখুন.."></textarea>
-                    </div>
+                সাবস্ক্রাইব করুন খবর, আপডেট ও প্রচারমূলক অনুষ্ঠানের জন্য <br>
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="alert-box {{ message.tags }} " {% endif %}> {{ message }} </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <form method="POST" action="{% url 'home' %}" id="application-form">
+                    {% csrf_token %}
+                    {{form.as_p}}
                     <input type="submit" value="পাঠান" class="form-control">
                 </form>
             </div>
@@ -416,11 +308,33 @@
                             হওয়ার সুযোগ অফিসের কাজ থেকে মাঠকর্মী পর্যায় পর্যন্ত প্রসারিত। আপনার যদি অবহেলিত
                             সম্প্রদায়কে দেওয়ার মত সময় ও কাজ করার প্রতিশ্রুতি থাকে, তাহলে আমাদের টিমে আপনাকে
                             স্বাগত জানাতে অপেক্ষা করছি</small></p>
-                    <a href="#" class="btn btn-primary">নিবন্ধন করুন</a>
+                    <a href="{% url 'volunteerRegistration' %}" class="btn btn-primary">নিবন্ধন করুন</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
 
+    $('#application-form label').hide();
+
+    $('#recipeCarousel.carousel .carousel-item').each(function () {
+        var minPerSlide = 3;
+        var next = $(this).next();
+        if (!next.length) {
+            next = $(this).siblings(':first');
+        }
+        next.children(':first-child').clone().appendTo($(this));
+
+        for (var i = 0; i < minPerSlide; i++) {
+            next = next.next();
+            if (!next.length) {
+                next = $(this).siblings(':first');
+            }
+
+            next.children(':first-child').clone().appendTo($(this));
+        }
+    });
+
+</script>
 {% endblock container %}
